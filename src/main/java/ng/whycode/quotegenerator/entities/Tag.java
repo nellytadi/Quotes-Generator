@@ -26,6 +26,8 @@ public class Tag {
 	@SequenceGenerator(name = "tag_generator", sequenceName = "tag_seq", allocationSize = 1)
 	private long tagId;
 	
+	
+
 	@NotNull
 	@Column(unique = true)
 	private String tag;
@@ -89,5 +91,12 @@ public class Tag {
 	public void setUpdatedAt(Date updatedAt) {
 		this.updatedAt = updatedAt;
 	}
+	
+	public List<Quote> getQuotes() {
+		return quotes;
+	}
 
+	public void setQuotes(List<Quote> quotes) {
+		this.quotes = quotes;
+	}
 }

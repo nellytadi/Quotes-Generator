@@ -7,3 +7,17 @@
 	border-radius: 2px;
 	float: left;
 }
+.tags-large {
+	padding: 8px 10px;
+	font-size: 14px;
+}
+.tags-body {
+	background: white;
+	min-height: 100px;
+	padding: 10px;
+}
+
+.form-tag{
+	display:none;
+	margin-bottom: 20px;
+}

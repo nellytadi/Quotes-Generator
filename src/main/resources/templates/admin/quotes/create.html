@@ -75,42 +75,9 @@
  	
 </div>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.11.1/typeahead.bundle.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.20/angular.min.js"></script>
     <script th:src="@{/vendor/bootstrap-tagsinput/dist/bootstrap-tagsinput.min.js}"></script>
-    <script th:src="@{/vendor/bootstrap-tagsinput/dist/bootstrap-tagsinput/bootstrap-tagsinput-angular.min.js}"></script>
-<script>
-var quoteTags = decodeHtml('[[${jsontags}]]');
-quoteTags = JSON.parse(quoteTags);
-var resultData = [];
-for(var i in quoteTags){
-	resultData.push( quoteTags[i].tag);
-
-}
-
-function decodeHtml(text){
-	var txt = document.createElement("textarea");
-	txt.innerHTML = text;
-	return txt.value;
-	
-}
-
-var quotes = new Bloodhound({
-	local: resultData,
-	queryTokenizer: Bloodhound.tokenizers.whitespace,
-	datumTokenizer: Bloodhound.tokenizers.whitespace
-});
-quotes.initialize();
-
-$('select').tagsinput({
-
-	 trimValue: true,
-	  typeaheadjs: {
-	    name: 'quotes',
-	    source: quotes.ttAdapter()
-	  },
-	
-});
-</script>
+	<script> var tags ='[[${jsontags}]]'; </script>
+ 	<script th:src="@{/js/index.js}"></script>
 </body>
 
 </html>

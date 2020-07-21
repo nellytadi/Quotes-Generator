@@ -52,7 +52,7 @@
 		      <th th:text="${quote.quoteId}"></th>
 		      <td th:text="${quote.quote}"></td>
 		      <td>
-		      	<div class="tags" th:each="tag: ${quote.tags}" th:text="${tag.tag}+' '"></div>
+		      	<div class="tags" th:each="tag: ${quote.tags}" th:text="${tag.tag}"></div>
 		      </td>
 		      <td th:text="${quote.author}"></td>
 		    </tr>

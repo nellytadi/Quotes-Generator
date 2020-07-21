@@ -35,7 +35,6 @@ public class QuoteController {
 		model.addAttribute("tags", tags);
 		
 		
-		
 		ObjectMapper mapper = new ObjectMapper();
 		
 		try {
@@ -63,6 +62,7 @@ public class QuoteController {
 			theTag.setCreatedAt(new Date());
 			theTag.setUpdatedAt(new Date());
 			Tag found = tagRepo.findByTag(tag) ;
+			
 			if(found == null) {
 				 tagRepo.save(theTag);
 			}
