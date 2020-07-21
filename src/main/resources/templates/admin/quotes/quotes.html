@@ -26,8 +26,38 @@
         <div class="container-fluid">
 
           <!-- Page Heading -->
-          <h1 class="h3 mb-4 text-gray-800">Blank Page</h1>
-
+          <h1 class="h3 mb-4 text-gray-800">Quotes
+          
+	          <a th:href="@{/quote/create}" class="btn btn-primary btn-icon-split float-right">
+	           	<span class="icon text-white-50">
+	                <i class="fas fa-flag"></i>
+	            </span>
+	            <span class="text">Create Quote</span>
+	          </a>
+           </h1>
+		<table class="table">
+		  <thead>
+		    <tr>
+		      <th scope="col">#</th>
+		      <th scope="col">Quote</th>
+		      <th scope="col">Tags</th>
+		      <th scope="col">Author</th>
+		  
+		    </tr>
+		  </thead>
+		  
+		
+		  <tbody>
+		    <tr th:each="quote : ${quotes}">
+		      <th th:text="${quote.quoteId}"></th>
+		      <td th:text="${quote.quote}"></td>
+		      <td>
+		      	<div class="tags" th:each="tag: ${quote.tags}" th:text="${tag.tag}+' '"></div>
+		      </td>
+		      <td th:text="${quote.author}"></td>
+		    </tr>
+		  </tbody>
+		</table>
         </div>
         <!-- /.container-fluid -->
 

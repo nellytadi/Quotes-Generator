@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -15,6 +16,9 @@ import javax.persistence.ManyToMany;
 import javax.persistence.SequenceGenerator;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.sun.istack.NotNull;
+
+
 @Entity
 public class Tag {
 	@Id
@@ -22,6 +26,8 @@ public class Tag {
 	@SequenceGenerator(name = "tag_generator", sequenceName = "tag_seq", allocationSize = 1)
 	private long tagId;
 	
+	@NotNull
+	@Column(unique = true)
 	private String tag;
 	private Date createdAt;
 	private Date updatedAt;
@@ -38,14 +44,18 @@ public class Tag {
 		
 	}
 
-	public Tag(String tag) {
+	public Tag(String tag, Date createdAt,Date updatedAt) {
 		super();
 		this.tag = tag;
+		this.createdAt = createdAt;
+		this.updatedAt = updatedAt;
 	}
 
-	public Tag(String tag, List<Quote> quotes) {
+	public Tag(String tag, Date createdAt,Date updatedAt, List<Quote> quotes) {
 		super();
 		this.tag = tag;
+		this.createdAt = createdAt;
+		this.updatedAt = updatedAt;
 		this.quotes = quotes;
 	}
 	public long getTagId() {

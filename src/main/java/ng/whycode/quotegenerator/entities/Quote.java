@@ -13,6 +13,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.SequenceGenerator;
+import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -22,9 +23,10 @@ public class Quote {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "quote_generator")
 	@SequenceGenerator(name = "quote_generator", sequenceName = "quote_seq", allocationSize = 1)
 	private long quoteId;
-
+	
+	@NotNull
 	private String quote;
-	private String createdBy;
+	private String author;
 	private Date createdAt;
 	private Date updatedAt;
 	
@@ -34,6 +36,7 @@ public class Quote {
 	joinColumns=@JoinColumn(name="quote_id"),
 	inverseJoinColumns= @JoinColumn(name="tag_id")
 			)
+	@NotNull(message="Please create tags")
 	@JsonIgnore
 	private List<Tag> tags;
 	
@@ -41,18 +44,13 @@ public class Quote {
 		
 	}
 	
-	public Quote(String quote, String createdBy, Date createdAt) {
-		super();
-		
-		this.quote = quote;
-		this.createdBy = createdBy;
-		this.createdAt = createdAt;
 
-	}
-	public Quote(String quote, String createdBy, List<Tag> tags) {
+	public Quote(String quote, String author, List<Tag> tags, Date createdAt, Date updatedAt) {
 		super();
 		this.quote = quote;
-		this.createdBy = createdBy;
+		this.author = author;
+		this.createdAt = createdAt;
+		this.updatedAt = updatedAt;
 		this.tags = tags;
 	}
 
@@ -60,49 +58,52 @@ public class Quote {
 		return quoteId;
 	}
 
-
 	public void setQuoteId(long quoteId) {
 		this.quoteId = quoteId;
 	}
-
 
 	public String getQuote() {
 		return quote;
 	}
 
-
 	public void setQuote(String quote) {
 		this.quote = quote;
 	}
 
+	
 
-	public String getCreatedBy() {
-		return createdBy;
+	public String getAuthor() {
+		return author;
 	}
 
-
-	public void setCreatedBy(String createdBy) {
-		this.createdBy = createdBy;
+	public void setAuthor(String author) {
+		this.author = author;
 	}
-
 
 	public Date getCreatedAt() {
 		return createdAt;
 	}
 
-
 	public void setCreatedAt(Date createdAt) {
 		this.createdAt = createdAt;
 	}
-
 
 	public Date getUpdatedAt() {
 		return updatedAt;
 	}
 
-
 	public void setUpdatedAt(Date updatedAt) {
 		this.updatedAt = updatedAt;
 	}
+
+	public List<Tag> getTags() {
+		return tags;
+	}
+
+	public void setTags(List<Tag> tags) {
+		this.tags = tags;
+	}
+
+
 
 }
