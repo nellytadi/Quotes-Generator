@@ -39,7 +39,7 @@
            <form th:action="@{/tag/store}" th:object="${tag}" method="POST" class="form-inline form-tag">
            		<div class="form-group col-md-10">
 				    <label for="exampleFormControlSelect2">Add Tag</label>  
-					<select multiple  data-role="taginput" th:field="${tag.tag}"></select>
+					<select multiple  data-role="taginput" th:field="${tag.tag}" required></select>
 			  	</div>
 			  	
 			  	 <div class="form-group col-md-2" style="margin-top:2%">
