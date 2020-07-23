@@ -66,13 +66,13 @@ public class QuoteController {
 			theTag.setTag(tag);
 			theTag.setCreatedAt(new Date());
 			theTag.setUpdatedAt(new Date());
-			Tag found = tagRepo.findByTag(tag) ;
 			
-			if(found == null) {
+			
+			if(tagRepo.findByTag(tag) == null) {
 				 tagRepo.save(theTag);
 			}
 			
-			listtags.add(found);
+			listtags.add(tagRepo.findByTag(tag));
 
 		}
 	
@@ -106,10 +106,11 @@ public class QuoteController {
 
         for (int index = 0; index < worksheet.getPhysicalNumberOfRows(); index++) {
             if (index > 0) {
+            	 XSSFRow row = worksheet.getRow(index);
+            	 if(index == 1) {
+            		 System.out.println(" Hello row \t "+row.getCell(1).getStringCellValue() +" " + row.getCell(2).getStringCellValue());
+            	 }
                 Quote quote = new Quote();
-
-                XSSFRow row = worksheet.getRow(index);
-            
                
                 quote.setQuote(row.getCell(0).getStringCellValue());
                 quote.setAuthor(row.getCell(1).getStringCellValue());
@@ -123,15 +124,15 @@ public class QuoteController {
     			theTag.setTag(row.getCell(2).getStringCellValue());
     			theTag.setCreatedAt(new Date());
     			theTag.setUpdatedAt(new Date());
-    			Tag found = tagRepo.findByTag(row.getCell(2).getStringCellValue()) ;
     			
-    			if(found == null) {
+    			
+    			if(tagRepo.findByTag(row.getCell(2).getStringCellValue()) == null) {
     				 tagRepo.save(theTag);
     			}
     			
-    			listtags.add(found);
+    			listtags.add(tagRepo.findByTag(row.getCell(2).getStringCellValue()));
     			
-    			quote.setTags(listtags);;
+    			quote.setTags(listtags);
                
           
                 quoteRepo.save(quote);

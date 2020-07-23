@@ -35,14 +35,14 @@
 	            <span class="text">Create Quote</span>
 	          </a>
            </h1>
-		<table class="table">
+		<table class="table table-striped">
 		  <thead>
 		    <tr>
 		      <th scope="col">#</th>
 		      <th scope="col">Quote</th>
 		      <th scope="col">Tags</th>
 		      <th scope="col">Author</th>
-		  
+		  	  <th scope="col"> Action</th>
 		    </tr>
 		  </thead>
 		  
@@ -55,10 +55,56 @@
 		      	<div class="tags" th:each="tag: ${quote.tags}" th:text="${tag.tag}"></div>
 		      </td>
 		      <td th:text="${quote.author}"></td>
+		      <td>
+		      	<a href="#" class="btn btn-warning  btn-sm btn-circle mb-1">
+                    <i class="fas fa-edit"></i>
+                 </a>
+		      	<a href="#" class="btn btn-danger  btn-sm btn-circle mb-1">
+                    <i class="fas fa-trash"></i>
+                 </a>
+                  
+		      	
+		      	
+		      </td>
 		    </tr>
 		  </tbody>
 		</table>
-        </div>
+		
+		
+		<nav aria-label="...">
+		  <ul class="pagination">
+		    
+		    <li class="page-item" th:if="${quotes.hasPrevious()}">
+		        <a class="page-link" th:href="@{/dashboard/quotes(page=${quotes.number-1},size=${quotes.size})}">Previous</a>
+		    </li>
+		    <li class="page-item disabled" th:unless="${quotes.hasPrevious()}">
+		        <a class="page-link" th:href="@{/dashboard/quotes(page=${quotes.number-1},size=${quotes.size})}">Previous</a>
+		    </li>
+		   
+		    <th:block th:each="i: ${#numbers.sequence(0, quotes.totalPages - 1)}">
+		    
+			    <li th:if="${quotes.number == i}" class="page-item active"  aria-current="page">
+			       	<span class="page-link">[[${i}+1]] 
+			        	<span class="sr-only">(current)</span>
+			      	</span>
+			    </li>
+			    <li th:unless="${quotes.number == i}" class="page-item" >
+			         <a class="page-link" th:href="@{/dashboard/quotes(page=${i},size=${quotes.size})}">[[${i}+1]]</a>
+			    </li>
+		        
+		    </th:block>
+		    <li class="page-item" th:if="${quotes.hasNext()}">
+		        <a class="page-link" th:href="@{/dashboard/quotes(page=${quotes.number+1},size=${quotes.size})}">Next</a>
+		    </li>
+		     <li class="page-item disabled" th:unless="${quotes.hasNext()}">
+		        <a class="page-link" th:href="@{/dashboard/quotes(page=${quotes.number+1},size=${quotes.size})}">Next</a>
+		    </li>
+		    </ul>
+		    </nav>
+		    
+		</div>
+				
+    
         <!-- /.container-fluid -->
 
       </div>
