@@ -35,23 +35,34 @@
           	</a>
           </h1>
 			
-			<form th:action="@{/quote/store}" method="POST" th:object="${quote}">
-			<input type="hidden" th:field="${quote.quoteId}">
+		<form th:action="@{/quote/store}" method="POST" th:object="${quote}">
+			
+			  <input type="hidden" th:field="${quote.quoteId}">
+			  
 			  <div class="form-group">
 			    <label for="exampleFormControlTextarea">Enter Quote</label>
-			    <textarea class="form-control" id="exampleFormControlTextarea" rows="3" th:field="${quote.quote}" required></textarea>
+			    <textarea class="form-control" id="exampleFormControlTextarea" rows="3" th:field="${quote.quoteName}" ></textarea>
+			    <span th:if="${#fields.hasErrors('quoteName')}" 
+			 		th:errors="${quote.quoteName}" class="errors">
+			 	</span>
 			  </div>
 			  
 			   <div class="form-group">
 			    <label for="author">Author</label>
-			    <input type="text" th:field="${quote.author}" class="form-control" required>
+			    <input type="text" th:field="${quote.author}" class="form-control" >
+			     <span th:if="${#fields.hasErrors('author')}" 
+			 		th:errors="${quote.author}" class="errors">
+			 	</span>
 			  </div>
 
 			  <div class="form-group">
 			    <label for="exampleFormControlSelect2">Select Tags</label>  
-				<select multiple  th:field="${quote.tags}" data-role="taginput" required>
-				   
+				<select multiple  name="tagsFrom" data-role="taginput" >
+				  	<option th:each="tag : ${quote.tags}" th:value="${tag.tag}" th:text="${tag.tag}"></option>
 				 </select>
+				  <span th:if="${#fields.hasErrors('tags')}" 
+			 		th:errors="${quote.tags}" class="errors">
+			 	</span>
 			  </div>
 			   <div class="form-group float-right">
 				 <button class="btn btn-primary">

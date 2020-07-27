@@ -25,9 +25,13 @@ public class Quote {
 	private long quoteId;
 	
 	@NotNull
-	private String quote;
+	private String quoteName;
+	
+	@NotNull
 	private String author;
+	
 	private Date createdAt;
+
 	private Date updatedAt;
 	
 	@ManyToMany(cascade= {CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH},
@@ -36,23 +40,35 @@ public class Quote {
 	joinColumns=@JoinColumn(name="quote_id"),
 	inverseJoinColumns= @JoinColumn(name="tag_id")
 			)
-	@NotNull(message="Please create tags")
 	@JsonIgnore
 	private List<Tag> tags;
 	
+
 	public Quote() {
 		
 	}
 	
 
-	public Quote(String quote, String author, List<Tag> tags, Date createdAt, Date updatedAt) {
+	public Quote(String quoteName, String author, List<Tag> tags, Date createdAt, Date updatedAt) {
 		super();
-		this.quote = quote;
+		this.quoteName = quoteName;
 		this.author = author;
 		this.createdAt = createdAt;
 		this.updatedAt = updatedAt;
 		this.tags = tags;
 	}
+
+
+
+	public String getQuoteName() {
+		return quoteName;
+	}
+
+
+	public void setQuoteName(String quoteName) {
+		this.quoteName = quoteName;
+	}
+
 
 	public long getQuoteId() {
 		return quoteId;
@@ -61,16 +77,6 @@ public class Quote {
 	public void setQuoteId(long quoteId) {
 		this.quoteId = quoteId;
 	}
-
-	public String getQuote() {
-		return quote;
-	}
-
-	public void setQuote(String quote) {
-		this.quote = quote;
-	}
-
-	
 
 	public String getAuthor() {
 		return author;
@@ -85,7 +91,7 @@ public class Quote {
 	}
 
 	public void setCreatedAt(Date createdAt) {
-		this.createdAt = createdAt;
+		this.createdAt = new Date();
 	}
 
 	public Date getUpdatedAt() {
@@ -93,7 +99,7 @@ public class Quote {
 	}
 
 	public void setUpdatedAt(Date updatedAt) {
-		this.updatedAt = updatedAt;
+		this.updatedAt = new Date();
 	}
 
 	public List<Tag> getTags() {
@@ -103,7 +109,4 @@ public class Quote {
 	public void setTags(List<Tag> tags) {
 		this.tags = tags;
 	}
-
-
-
 }
