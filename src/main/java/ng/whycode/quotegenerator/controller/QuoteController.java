@@ -6,18 +6,18 @@ import java.util.Date;
 import java.util.List;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotEmpty;
 
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.Errors;
-import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,11 +31,12 @@ import ng.whycode.quotegenerator.dao.IQuoteRepository;
 import ng.whycode.quotegenerator.dao.ITagRepository;
 import ng.whycode.quotegenerator.entities.Quote;
 import ng.whycode.quotegenerator.entities.Tag;
+import ng.whycode.quotegenerator.pojo.QuoteForm;
 
 @Controller
 @RequestMapping("/quote")
-@Validated
 public class QuoteController {
+	
 	@Autowired
 	IQuoteRepository quoteRepo;
 	
@@ -43,60 +44,41 @@ public class QuoteController {
 	ITagRepository tagRepo;
 	
 	@GetMapping("/create")
-	public String create(Model model, Quote quote) {
+	public String create(Model model, QuoteForm quote) {
 		List <Tag> tags = tagRepo.findAll();
+		
 		model.addAttribute("tags", tags);
 		
-		
-		ObjectMapper mapper = new ObjectMapper();
-		
-		try {
-			String jsonString = mapper.writeValueAsString(tags);
-			model.addAttribute("jsontags", jsonString);
-		} catch (JsonProcessingException e) {
-			e.printStackTrace();
-		}
+		model.addAttribute("jsontags", returnTagsAsJson(tagRepo.findAll()));
 		
 		model.addAttribute("quote", quote);
+		
 		return "admin/quotes/create";
 	}
 	
 	@PostMapping("/store")
-	public String store(@Valid Quote quote, @RequestParam @NotEmpty String[] tagsFrom, Model model, Errors error,BindingResult result) {
-	
-		if(error.hasErrors()) {
+	public String store(@Valid QuoteForm quoteform,BindingResult result, Model model) {
+		
+		if(result.hasErrors()) {
+			model.addAttribute("jsontags", returnTagsAsJson(tagRepo.findAll()));
 			return "admin/quotes/create";
 		}
-
 		
-		List<Tag> listtags = new ArrayList<Tag> ();
+		List<Tag> listtags = firstOrCreateListTags(quoteform.getTags());
 		
-		for(String tag : tagsFrom) {
-			
-			Tag theTag = new Tag();
-					
-			theTag.setTag(tag);
-			theTag.setCreatedAt(new Date());
-			theTag.setUpdatedAt(new Date());
-					
-					
-			if(tagRepo.findByTag(tag) == null) {
-				 tagRepo.save(theTag);
-			}
-					
-			listtags.add(tagRepo.findByTag(tag));
-		
-		}
-		
-		
-		quote.setTags(listtags);
-		
-		quoteRepo.save(quote);
+			Quote quote = new Quote();
+			quote.setAuthor(quoteform.getAuthor());
+			quote.setQuoteName(quoteform.getQuoteName());
+			quote.setTags(listtags);
+			quoteRepo.save(quote);
 		
 		return "redirect:/dashboard/quotes";
 	}
+
 	
 	
+
+
 	@GetMapping("/import/excel")
 	public String viewImportExcel() {
 		
@@ -163,14 +145,7 @@ public class QuoteController {
 		model.addAttribute("tags", tags);
 		
 		
-		ObjectMapper mapper = new ObjectMapper();
-		
-		try {
-			String jsonString = mapper.writeValueAsString(tags);
-			model.addAttribute("jsontags", jsonString);
-		} catch (JsonProcessingException e) {
-			e.printStackTrace();
-		}
+		model.addAttribute("jsontags", returnTagsAsJson(tags));
 		
 		Quote quote = quoteRepo.findById(id).get();
 		
@@ -188,4 +163,41 @@ public class QuoteController {
 		return "redirect:/dashboard/quotes";
 	
 	}	
+	
+	public String returnTagsAsJson(List <Tag> tags) {
+		
+		
+		ObjectMapper mapper = new ObjectMapper();
+		String jsonString = null;
+		try {
+			jsonString = mapper.writeValueAsString(tags);
+			
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+		}
+		return jsonString;
+	}
+	
+	private List<Tag> firstOrCreateListTags(String [] tags) {
+		
+		List <Tag> listTags = new ArrayList<Tag>();
+
+		for(String tag : tags) {
+			
+			Tag theTag = new Tag();
+					
+			theTag.setTag(tag);
+			theTag.setCreatedAt(new Date());
+			theTag.setUpdatedAt(new Date());
+					
+					
+			if(tagRepo.findByTag(tag) == null) {
+				 tagRepo.save(theTag);
+			}
+					
+			listTags.add(tagRepo.findByTag(tag));
+		
+		}
+		return listTags;
+	}
 }

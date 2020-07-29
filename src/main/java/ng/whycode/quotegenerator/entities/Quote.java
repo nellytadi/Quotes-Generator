@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -13,7 +14,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.SequenceGenerator;
-import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -24,10 +24,9 @@ public class Quote {
 	@SequenceGenerator(name = "quote_generator", sequenceName = "quote_seq", allocationSize = 1)
 	private long quoteId;
 	
-	@NotNull
 	private String quoteName;
 	
-	@NotNull
+	@Column(columnDefinition = "varchar(255) default 'Unknown'",insertable=false)
 	private String author;
 	
 	private Date createdAt;
@@ -83,7 +82,8 @@ public class Quote {
 	}
 
 	public void setAuthor(String author) {
-		this.author = author;
+		
+			this.author = author;
 	}
 
 	public Date getCreatedAt() {
