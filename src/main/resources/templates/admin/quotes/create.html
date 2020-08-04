@@ -28,33 +28,51 @@
         <div class="container-fluid">
 
           <!-- Page Heading -->
-          <h1 class="h3 mb-4 text-gray-800">Create Quote</h1>
+          <h1 class="h3 mb-4 text-gray-800">Create Quote
+          	<a th:href="@{/quote/import/excel}" class="d-none d-sm-inline-block btn btn-primary shadow-sm float-right">
+          		<i class="fas fa-upload fa-sm text-white-50"></i> 
+          		<span class="text"> Import CSV </span>
+          	</a>
+          </h1>
 			
-			<form th:action="@{/quote/store}" method="POST" th:object="${quote}">
-			<input type="hidden" th:field="${quote.quoteId}">
+		<form th:action="@{/quote/store}" method="POST" th:object="${quoteForm}">
+			
+			  <input type="hidden" th:field="${quoteForm.quoteId}">
+			  
 			  <div class="form-group">
 			    <label for="exampleFormControlTextarea">Enter Quote</label>
-			    <textarea class="form-control" id="exampleFormControlTextarea" rows="3" th:field="${quote.quote}"></textarea>
+			    <textarea class="form-control" id="exampleFormControlTextarea" rows="3" th:field="${quoteForm.quoteName}" required></textarea>
+			    <span th:if="${#fields.hasErrors('quoteName')}" 
+			 		th:errors="${quoteForm.quoteName}" class="errors">
+			 	</span>
 			  </div>
 			  
-			   <div class="form-group">
+			 <div class="form-group">
 			    <label for="author">Author</label>
-			    <input type="text" th:field="${quote.author}" class="form-control">
-			  </div>
+			    <input type="text" th:field="${quoteForm.author}" class="form-control" required>
+			    <span th:if="${#fields.hasErrors('author')}" 
+			 		th:errors="${quoteForm.author}" class="errors">
+			 	</span>
+			 </div>
 
-			  <div class="form-group">
+			 <div class="form-group">
 			    <label for="exampleFormControlSelect2">Select Tags</label>  
-				<select multiple  th:field="${quote.tags}" data-role="taginput">
-				   
-				 </select>
-			  </div>
-			   <div class="form-group float-right">
+				<select multiple th:field="${quoteForm.tags}" data-role="taginput" required>
+				  	<option th:each="tag : ${quoteForm.tags}" th:value="${tag.tag}" th:text="${tag.tag}"></option>
+				</select>
+				<span th:if="${#fields.hasErrors('tags')}" 
+			 		th:errors="${quoteForm.tags}" class="errors">
+			 	</span>
+			 </div>
+			  
+			 <div class="form-group float-right">
 				 <button class="btn btn-primary">
 		            <span class="text">Create</span>
-	           	</button>
-	           	</div>
+	           	 </button>
+	       	  </div>
 			</form>
         </div>
+        
         <!-- /.container-fluid -->
 
       </div>

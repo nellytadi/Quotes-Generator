@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -13,7 +14,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.SequenceGenerator;
-import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -24,10 +24,13 @@ public class Quote {
 	@SequenceGenerator(name = "quote_generator", sequenceName = "quote_seq", allocationSize = 1)
 	private long quoteId;
 	
-	@NotNull
-	private String quote;
+	private String quoteName;
+	
+	@Column(columnDefinition = "varchar(255) default 'Unknown'",insertable=false)
 	private String author;
+	
 	private Date createdAt;
+
 	private Date updatedAt;
 	
 	@ManyToMany(cascade= {CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH},
@@ -36,23 +39,35 @@ public class Quote {
 	joinColumns=@JoinColumn(name="quote_id"),
 	inverseJoinColumns= @JoinColumn(name="tag_id")
 			)
-	@NotNull(message="Please create tags")
 	@JsonIgnore
 	private List<Tag> tags;
 	
+
 	public Quote() {
 		
 	}
 	
 
-	public Quote(String quote, String author, List<Tag> tags, Date createdAt, Date updatedAt) {
+	public Quote(String quoteName, String author, List<Tag> tags, Date createdAt, Date updatedAt) {
 		super();
-		this.quote = quote;
+		this.quoteName = quoteName;
 		this.author = author;
 		this.createdAt = createdAt;
 		this.updatedAt = updatedAt;
 		this.tags = tags;
 	}
+
+
+
+	public String getQuoteName() {
+		return quoteName;
+	}
+
+
+	public void setQuoteName(String quoteName) {
+		this.quoteName = quoteName;
+	}
+
 
 	public long getQuoteId() {
 		return quoteId;
@@ -62,22 +77,13 @@ public class Quote {
 		this.quoteId = quoteId;
 	}
 
-	public String getQuote() {
-		return quote;
-	}
-
-	public void setQuote(String quote) {
-		this.quote = quote;
-	}
-
-	
-
 	public String getAuthor() {
 		return author;
 	}
 
 	public void setAuthor(String author) {
-		this.author = author;
+		
+			this.author = author;
 	}
 
 	public Date getCreatedAt() {
@@ -85,7 +91,7 @@ public class Quote {
 	}
 
 	public void setCreatedAt(Date createdAt) {
-		this.createdAt = createdAt;
+		this.createdAt = new Date();
 	}
 
 	public Date getUpdatedAt() {
@@ -93,7 +99,7 @@ public class Quote {
 	}
 
 	public void setUpdatedAt(Date updatedAt) {
-		this.updatedAt = updatedAt;
+		this.updatedAt = new Date();
 	}
 
 	public List<Tag> getTags() {
@@ -103,7 +109,4 @@ public class Quote {
 	public void setTags(List<Tag> tags) {
 		this.tags = tags;
 	}
-
-
-
 }

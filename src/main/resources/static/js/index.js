@@ -2,7 +2,6 @@ var quoteTags =  JSON.parse(decodeHtml(tags));
 var resultData = [];
 for(var i in quoteTags){
 	resultData.push( quoteTags[i].tag);
-
 }
 
 function decodeHtml(text){
